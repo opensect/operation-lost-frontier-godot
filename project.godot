@@ -1,0 +1,39 @@
+; Engine configuration file.
+; Operation: Lost Frontier - Godot 4.4.1, GDScript, 2D.
+; No personal info anywhere. Package: com.lostfrontier.game
+
+config_version=5
+
+[application]
+
+config/name="OperationLostFrontier"
+config/description="2D side-scrolling run-and-gun, 1-4 player LAN co-op, 20 missions."
+run/main_scene="res://scenes/Main.tscn"
+config/features=PackedStringArray("4.4", "GL Compatibility")
+config/icon="res://icon.png"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=0
+
+[layer_names]
+
+2d_physics/layer_1="world"
+2d_physics/layer_2="player"
+2d_physics/layer_3="enemy"
+2d_physics/layer_4="bullet_player"
+2d_physics/layer_5="bullet_enemy"
+2d_physics/layer_6="pickup"
+
+[physics]
+
+common/physics_ticks_per_second=60
+
+[rendering]
+textures/vram_compression/import_etc2_astc=true
+
+environment/defaults/default_clear_color=Color(0.05, 0.12, 0.08, 1)

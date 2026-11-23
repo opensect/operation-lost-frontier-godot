@@ -1,0 +1,525 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_Scr"]
+[ext_resource type="Script" path="res://scripts/lan/lan_manager.gd" id="2_Scr"]
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="3_Scr"]
+[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="4_Scr"]
+[ext_resource type="Script" path="res://scripts/ui/touch_controls.gd" id="5_Scr"]
+[ext_resource type="PackedScene" path="res://scenes/Player.tscn" id="6_Pac"]
+[ext_resource type="Font" path="res://assets/fonts/DejaVuSans-Bold.ttf" id="11_Fon"]
+
+[sub_resource type="RectangleShape2D" id="Rect_ground"]
+size = Vector2(4224, 64)
+
+[sub_resource type="RectangleShape2D" id="Rect_plat"]
+size = Vector2(320, 38)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.04, 0.07, 0.14, 0.94)
+border_color = Color(1, 0.8, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 16.0
+content_margin_right = 16.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_Scr")
+
+[node name="World" type="Node2D" parent="."]
+
+
+
+[node name="Player" parent="." instance=ExtResource("6_Pac")]
+position = Vector2(-128, 128)
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-128, 116)
+position_smoothing_enabled = true
+position_smoothing_speed = 4.0
+
+[node name="BackgroundLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="BackgroundRect" type="TextureRect" parent="BackgroundLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+expand_mode = 1
+stretch_mode = 6
+modulate = Color(0.9, 0.9, 0.9, 1)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 10
+script = ExtResource("3_Scr")
+
+[node name="TopLeftPanel" type="PanelContainer" parent="HUD"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 312.0
+offset_bottom = 170.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="TopLeftPanelVBox" type="VBoxContainer" parent="HUD/TopLeftPanel"]
+theme_override_constants/separation = 6
+
+[node name="HpBar" type="ProgressBar" parent="HUD/TopLeftPanel/TopLeftPanelVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(272, 22)
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="ArmorBar" type="ProgressBar" parent="HUD/TopLeftPanel/TopLeftPanelVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(272, 22)
+max_value = 100.0
+value = 0.0
+show_percentage = false
+
+[node name="LivesLabel" type="Label" parent="HUD/TopLeftPanel/TopLeftPanelVBox"]
+unique_name_in_owner = true
+text = "Lives: 3"
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 0
+
+[node name="HpLabel" type="Label" parent="HUD/TopLeftPanel/TopLeftPanelVBox"]
+unique_name_in_owner = true
+text = "HP 100"
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.5, 0.5, 1)
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 0
+
+[node name="TopCenterVBox" type="VBoxContainer" parent="HUD"]
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -560.0
+offset_top = 12.0
+offset_right = 560.0
+offset_bottom = 120.0
+theme_override_constants/separation = 6
+
+[node name="ObjectiveLabel" type="Label" parent="HUD/TopCenterVBox"]
+unique_name_in_owner = true
+text = "-"
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 1
+
+[node name="TimerLabel" type="Label" parent="HUD/TopCenterVBox"]
+unique_name_in_owner = true
+text = "TIME 00:00"
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 1
+
+[node name="BossLabel" type="Label" parent="HUD/TopCenterVBox"]
+unique_name_in_owner = true
+text = ""
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 1
+
+[node name="BossBar" type="ProgressBar" parent="HUD/TopCenterVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 16)
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="TopRightPanel" type="PanelContainer" parent="HUD"]
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -312.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = 150.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="TopRightPanelVBox" type="VBoxContainer" parent="HUD/TopRightPanel"]
+theme_override_constants/separation = 6
+
+[node name="ScoreLabel" type="Label" parent="HUD/TopRightPanel/TopRightPanelVBox"]
+unique_name_in_owner = true
+text = "Score: 0"
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 0
+
+[node name="LanLabel" type="Label" parent="HUD/TopRightPanel/TopRightPanelVBox"]
+unique_name_in_owner = true
+text = "Solo"
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 0
+
+[node name="AbilityLabel" type="Label" parent="HUD/TopRightPanel/TopRightPanelVBox"]
+unique_name_in_owner = true
+text = ""
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.7, 0.9, 1, 1)
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 0
+
+[node name="PauseButton" type="Button" parent="HUD"]
+unique_name_in_owner = true
+text = "II"
+theme_override_fonts/font = ExtResource("11_Fon")
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -76.0
+offset_top = 162.0
+offset_right = -12.0
+offset_bottom = 226.0
+
+[node name="BottomLeftPanel" type="PanelContainer" parent="HUD"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -230.0
+offset_top = -200.0
+offset_right = 230.0
+offset_bottom = -96.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="BottomLeftPanelVBox" type="VBoxContainer" parent="HUD/BottomLeftPanel"]
+theme_override_constants/separation = 6
+
+[node name="WeaponLabel" type="Label" parent="HUD/BottomLeftPanel/BottomLeftPanelVBox"]
+unique_name_in_owner = true
+text = "Pistol  12 / ∞"
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 0
+
+[node name="GrenadesLabel" type="Label" parent="HUD/BottomLeftPanel/BottomLeftPanelVBox"]
+unique_name_in_owner = true
+text = "Grenades: 3"
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 0
+
+[node name="MessageLabel" type="Label" parent="HUD"]
+unique_name_in_owner = true
+text = ""
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(1, 0.9, 0.4, 1)
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_top = 150.0
+offset_right = 400.0
+offset_bottom = 190.0
+
+[node name="ResultsPanel" type="TextureRect" parent="HUD"]
+unique_name_in_owner = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -170.0
+offset_right = 320.0
+offset_bottom = 170.0
+expand_mode = 1
+stretch_mode = 5
+visible = false
+
+[node name="MainMenu" type="CanvasLayer" parent="."]
+layer = 20
+script = ExtResource("4_Scr")
+
+[node name="MenuBackdrop" type="TextureRect" parent="MainMenu"]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+expand_mode = 1
+stretch_mode = 0
+modulate = Color(0.45, 0.45, 0.45, 1)
+
+[node name="Background" type="ColorRect" parent="MainMenu"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.03, 0.06, 0.55)
+
+[node name="MenuCenter" type="CenterContainer" parent="MainMenu"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MenuPanel" type="PanelContainer" parent="MainMenu/MenuCenter"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="MenuColumns" type="HBoxContainer" parent="MainMenu/MenuCenter/MenuPanel"]
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="LeftCol" type="VBoxContainer" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns"]
+theme_override_constants/separation = 10
+
+[node name="IconImage" type="TextureRect" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/LeftCol"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 110)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LogoImage" type="TextureRect" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/LeftCol"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(620, 150)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SubtitleLabel" type="Label" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/LeftCol"]
+unique_name_in_owner = true
+text = "Black Veil has the Aether Core. Take back the Veyra Frontier."
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 1
+
+[node name="CharLabel" type="Label" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/LeftCol"]
+unique_name_in_owner = true
+text = "CHOOSE YOUR CHARACTER"
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.7, 0.9, 1, 1)
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 1
+
+[node name="CharButtons" type="HBoxContainer" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/LeftCol"]
+unique_name_in_owner = true
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Char0" type="Button" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/LeftCol/CharButtons"]
+text = "Ranger"
+theme_override_font_sizes/font_size = 20
+theme_override_fonts/font = ExtResource("11_Fon")
+custom_minimum_size = Vector2(150, 56)
+
+[node name="Char1" type="Button" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/LeftCol/CharButtons"]
+text = "Scout"
+theme_override_font_sizes/font_size = 20
+theme_override_fonts/font = ExtResource("11_Fon")
+custom_minimum_size = Vector2(150, 56)
+
+[node name="Char2" type="Button" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/LeftCol/CharButtons"]
+text = "Engineer"
+theme_override_font_sizes/font_size = 20
+theme_override_fonts/font = ExtResource("11_Fon")
+custom_minimum_size = Vector2(150, 56)
+
+[node name="Char3" type="Button" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/LeftCol/CharButtons"]
+text = "Medic"
+theme_override_font_sizes/font_size = 20
+theme_override_fonts/font = ExtResource("11_Fon")
+custom_minimum_size = Vector2(150, 56)
+
+[node name="StartButton" type="Button" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/LeftCol"]
+unique_name_in_owner = true
+text = "START MISSION"
+theme_override_font_sizes/font_size = 28
+theme_override_fonts/font = ExtResource("11_Fon")
+custom_minimum_size = Vector2(320, 64)
+
+[node name="ColSeparator" type="VSeparator" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns"]
+
+[node name="RightCol" type="VBoxContainer" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns"]
+theme_override_constants/separation = 10
+
+[node name="MissionThumb" type="TextureRect" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/RightCol"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(420, 190)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MissionLabel" type="Label" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/RightCol"]
+unique_name_in_owner = true
+text = "Mission 1: First Contact"
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 1
+
+[node name="MissionNav" type="HBoxContainer" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/RightCol"]
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="MissionPrevButton" type="Button" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/RightCol/MissionNav"]
+unique_name_in_owner = true
+text = "< MISSION"
+theme_override_font_sizes/font_size = 18
+theme_override_fonts/font = ExtResource("11_Fon")
+custom_minimum_size = Vector2(160, 48)
+
+[node name="MissionNextButton" type="Button" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/RightCol/MissionNav"]
+unique_name_in_owner = true
+text = "MISSION >"
+theme_override_font_sizes/font_size = 18
+theme_override_fonts/font = ExtResource("11_Fon")
+custom_minimum_size = Vector2(160, 48)
+
+[node name="LanTitle" type="Label" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/RightCol"]
+unique_name_in_owner = true
+text = "LAN CO-OP - 1-4 PLAYERS"
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 1
+
+[node name="HostRow" type="HBoxContainer" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/RightCol"]
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="HostButton" type="Button" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/RightCol/HostRow"]
+unique_name_in_owner = true
+text = "HOST LAN"
+theme_override_font_sizes/font_size = 18
+theme_override_fonts/font = ExtResource("11_Fon")
+custom_minimum_size = Vector2(160, 48)
+
+[node name="FindHostButton" type="Button" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/RightCol/HostRow"]
+unique_name_in_owner = true
+text = "FIND HOST"
+theme_override_font_sizes/font_size = 18
+theme_override_fonts/font = ExtResource("11_Fon")
+custom_minimum_size = Vector2(160, 48)
+
+[node name="JoinRow" type="HBoxContainer" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/RightCol"]
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="IpLineEdit" type="LineEdit" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/RightCol/JoinRow"]
+unique_name_in_owner = true
+text = "192.168.1.5"
+theme_override_font_sizes/font_size = 18
+theme_override_fonts/font = ExtResource("11_Fon")
+custom_minimum_size = Vector2(220, 48)
+
+[node name="JoinButton" type="Button" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/RightCol/JoinRow"]
+unique_name_in_owner = true
+text = "JOIN"
+theme_override_font_sizes/font_size = 18
+theme_override_fonts/font = ExtResource("11_Fon")
+custom_minimum_size = Vector2(110, 48)
+
+[node name="DifficultyButton" type="Button" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/RightCol"]
+unique_name_in_owner = true
+text = "Difficulty: Normal"
+theme_override_font_sizes/font_size = 18
+theme_override_fonts/font = ExtResource("11_Fon")
+custom_minimum_size = Vector2(260, 48)
+
+[node name="HintLabel" type="Label" parent="MainMenu/MenuCenter/MenuPanel/MenuColumns/RightCol"]
+unique_name_in_owner = true
+text = "1-4 players LAN co-op - press Enter to start"
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.9, 0.4, 1)
+theme_override_fonts/font = ExtResource("11_Fon")
+horizontal_alignment = 1
+
+[node name="TouchControls" type="CanvasLayer" parent="."]
+layer = 15
+visible = false
+script = ExtResource("5_Scr")
+
+
+
+[node name="JumpButton" type="Button" parent="TouchControls"]
+unique_name_in_owner = true
+text = "JUMP"
+theme_override_font_sizes/font_size = 22
+theme_override_fonts/font = ExtResource("11_Fon")
+anchor_left = 1
+anchor_top = 1
+anchor_right = 1
+anchor_bottom = 1
+offset_left = -180.0
+offset_top = -260.0
+offset_right = -70.0
+offset_bottom = -170.0
+
+[node name="FireButton" type="Button" parent="TouchControls"]
+unique_name_in_owner = true
+text = "FIRE"
+theme_override_font_sizes/font_size = 22
+theme_override_fonts/font = ExtResource("11_Fon")
+anchor_left = 1
+anchor_top = 1
+anchor_right = 1
+anchor_bottom = 1
+offset_left = -310.0
+offset_top = -260.0
+offset_right = -200.0
+offset_bottom = -170.0
+
+[node name="InteractButton" type="Button" parent="TouchControls"]
+unique_name_in_owner = true
+text = "E"
+theme_override_font_sizes/font_size = 22
+theme_override_fonts/font = ExtResource("11_Fon")
+anchor_left = 1
+anchor_top = 1
+anchor_right = 1
+anchor_bottom = 1
+offset_left = -440.0
+offset_top = -260.0
+offset_right = -330.0
+offset_bottom = -170.0
+
+[node name="AbilityButton" type="Button" parent="TouchControls"]
+unique_name_in_owner = true
+text = "ABILITY"
+theme_override_font_sizes/font_size = 22
+theme_override_fonts/font = ExtResource("11_Fon")
+anchor_left = 1
+anchor_top = 1
+anchor_right = 1
+anchor_bottom = 1
+offset_left = -580.0
+offset_top = -260.0
+offset_right = -460.0
+offset_bottom = -170.0
+
+[node name="LanManager" type="Node" parent="."]
+script = ExtResource("2_Scr")

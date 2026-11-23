@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/bullet.gd" id="1_Scr"]
+[ext_resource type="Texture2D" path="res://assets/powerups/fire.png" id="2_Tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bl"]
+size = Vector2(24, 8)
+
+[node name="Bullet" type="Area2D"]
+collision_layer = 8
+collision_mask = 5
+script = ExtResource("1_Scr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_Tex")
+scale = Vector2(0.5, 0.3)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_bl")

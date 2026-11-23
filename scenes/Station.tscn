@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/station.gd" id="1_Scr"]
+[ext_resource type="Texture2D" path="res://assets/props/metal_supply_box.png" id="2_Tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_st"]
+size = Vector2(96, 128)
+
+[node name="Station" type="Area2D"]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("1_Scr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_Tex")
+scale = Vector2(1.0, 1.0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_st")
